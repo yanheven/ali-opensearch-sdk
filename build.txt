@@ -1,0 +1,10 @@
+python setup.py 
+python setup.py sdist #制作分发包
+python setup.py bdist_egg #make egg
+python setup.py build #编译
+python setup.py install #安装
+python setup.py bdist_wininst #制作windows下的分发包
+python setup.py bdist_rpm #make rpm pakage
+
+Ugt7N1giMvOmwzoz
+Ak5Wze11tvswWPtHyeAGKXRz5UTrcK
