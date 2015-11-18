@@ -1,7 +1,8 @@
+# -*- encoding: utf-8 -*-
 '''
 opensearch python sdk client.
 '''
-from api import uhost
+from opensearchsdk.v2 import app
 from utils import base
 
 
@@ -10,16 +11,9 @@ class Client(object):
     opensearch python sdk client.
     '''
 
-    def __init__(self, base_url, public_key, private_key, debug=False,
-                 timing=False):
+    def __init__(self, base_url, key, key_id):
         self.base_url = base_url
-        self.private_key = private_key
-        self.public_key = public_key
-        self.uhost = uhost.UhostManager(self)
-        self.client = base.HTTPClient(base_url, debug, timing)
-
-    def get_timing(self):
-        return self.client.get_timing()
-
-    def reset_timing(self):
-        self.client.reset_timing()
+        self.key = key
+        self.key_id = key_id
+        self.app = app.UhostManager(self)
+        self.client = base.HTTPClient(base_url)

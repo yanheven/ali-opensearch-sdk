@@ -1,83 +1,95 @@
 # -*- encoding: utf-8 -*-
-import json
-import httplib
-import urlparse
-import urllib
-import hashlib
-import os
-import glob
-import errno
-import time
+import logging
+import requests
 
+from opensearchsdk.apiclient import exceptions
 from opensearchsdk.utils import prepare_url
-from opensearchsdk import uexceptions
+
+_logger = logging.getLogger(__name__)
 
 
 class HTTPClient(object):
-    def __init__(self, base_url, debug=None, timing=None):
+    user_agent = 'ali-opensearch-python-client'
+
+    def __init__(self, base_url, ):
         self.base_url = base_url
-        self.timing = timing
-        self.debug = debug
-        self.time = []
-        o = urlparse.urlsplit(base_url)
-        if o.scheme == 'https':
-            self.conn = httplib.HTTPSConnection(o.netloc)
-        else:
-            self.conn = httplib.HTTPConnection(o.netloc)
 
-    def __del__(self):
-        self.conn.close()
+    def request(self, method, url, **kwargs):
 
-    def get_timing(self):
-        return self.time
-
-    def reset_timing(self):
-        self.time = []
-
-    def get(self, resouse, params):
-        resouse += "?" + urllib.urlencode(params)
-        if self.debug:
-            print("DEBUG START>>>>\nRequest: %s%s\n" %
-                  (self.base_url, resouse))
-        response = None
-
+        kwargs.setdefault("headers", {})
+        kwargs["headers"]["User-Agent"] = self.user_agent
+        kwargs["headers"]["Content-Type"] = 'application/x-www-form-urlencoded'
+        self._logger_req(method, url, **kwargs)
+        resp = requests.request(method, url, **kwargs)
+        self._logger_resp(resp)
         try:
-            if self.timing:
-                start_time = time.time()
-            self.conn.request("GET", resouse)
-            if self.timing:
-                self.time.append(("%s %s" % ('GET', resouse),
-                                  start_time, time.time()))
-
-        except Exception as e:
-            raise uexceptions.ConnectionRefused(e)
-
-        respones_raw = self.conn.getresponse().read()
-
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            if resp.status_code == 404:
+                exc_type = exceptions.NotFoundException
+            else:
+                exc_type = exceptions.HttpException
+            raise exc_type(e,
+                           details=self._parse_error_resp(resp),
+                           status_code=resp.status_code)
         try:
-            response = json.loads(respones_raw)
-            if self.debug:
-                print(
-                    "Respone: %s\n<<<<DEBUG END\n" %
-                    json.dumps(response, encoding='UTF-8', ensure_ascii=False,
-                               indent=2))
+            resp.body = resp.json()
+        except ValueError as e:
+            raise exceptions.InvalidResponse(response=resp)
+        return resp
 
-        except Exception as e:
-            raise uexceptions.NoJsonFound(e)
+    def _parse_error_resp(self, resp):
+        try:
+            jresp = resp.json()
+            return jresp
+        except ValueError:
+            pass
+        return resp.text
 
-        if response.get('RetCode') != 0:
-            print('Message:%(Message)s\nRetCode:%(RetCode)s' % response)
-            raise uexceptions.BadParameters("message: %s /n bad parameters:%s"
-                                            % (response.get('Message'),
-                                               params))
-        return response
+    def _logger_req(self, method, url, **kwargs):
+        string_parts = [
+            "curl -i",
+            "-X '%s'" % method,
+            "'%s'" % url,
+        ]
+        for element in kwargs['headers'].items():
+            header = " -H '%s: %s'" % element
+            string_parts.append(header)
+        data = kwargs['data']
+        string_parts.append("'" + data + "'")
+        _logger.debug("REQ: %s" % " ".join(string_parts))
+
+    def _logger_resp(self, resp):
+        _logger.debug(
+            "RESP: [%s] %r" % (
+                resp.status_code,
+                resp.headers,
+            ),
+        )
+        if resp._content_consumed:
+            _logger.debug(
+                "RESP BODY: %s",
+                resp.text,
+            )
+        _logger.debug(
+            "encoding: %s",
+            resp.encoding,
+        )
 
 
 class Manager(object):
     def __init__(self, api):
         self.api = api
 
-    def _get(self, body):
-        token = prepare_url.g(self.api.private_key, body)
-        body['Signature'] = token
-        return self.api.client.get('/', body)
+    def _request(self, method, url, body):
+        key = self.api.key
+        key_id = self.api.key_id
+        body['Signature'] = prepare_url.get_signature(
+            method, body, key, key_id)
+        return self.api.client.request(method, url, body)
+
+    def get(self, url, body):
+        return self._request('GET', url, body)
+
+    def post(self, url, body):
+        return self._request('POST', url, body)
