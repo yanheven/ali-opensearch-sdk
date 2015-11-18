@@ -33,6 +33,7 @@ class TokenTest(TestCase):
         self.assertEqual(SIGNATURE, signature)
 
     def test_get_signed_url(self):
-
+        pass
 
     def test_get_common_params(self):
+        pass
