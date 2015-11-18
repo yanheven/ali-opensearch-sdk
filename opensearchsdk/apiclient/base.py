@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 import logging
 import requests
+import urllib
 
 from opensearchsdk.apiclient import exceptions
 from opensearchsdk.utils import prepare_url
@@ -11,16 +12,17 @@ _logger = logging.getLogger(__name__)
 class HTTPClient(object):
     user_agent = 'ali-opensearch-python-client'
 
-    def __init__(self, base_url, ):
+    def __init__(self, base_url):
         self.base_url = base_url
 
     def request(self, method, url, **kwargs):
-
+        url = self.base_url + url
         kwargs.setdefault("headers", {})
         kwargs["headers"]["User-Agent"] = self.user_agent
         kwargs["headers"]["Content-Type"] = 'application/x-www-form-urlencoded'
         self._logger_req(method, url, **kwargs)
         resp = requests.request(method, url, **kwargs)
+        print(resp.request.url, resp.request.body)
         self._logger_resp(resp)
         try:
             resp.raise_for_status()
@@ -36,7 +38,7 @@ class HTTPClient(object):
             resp.body = resp.json()
         except ValueError as e:
             raise exceptions.InvalidResponse(response=resp)
-        return resp
+        return resp.body
 
     def _parse_error_resp(self, resp):
         try:
@@ -47,16 +49,23 @@ class HTTPClient(object):
         return resp.text
 
     def _logger_req(self, method, url, **kwargs):
+        # if 'body' in kwargs and kwargs['body'] is not None:
+        #     url += '?' + urllib.parse.urlencode(kwargs['body'])
         string_parts = [
             "curl -i",
             "-X '%s'" % method,
             "'%s'" % url,
         ]
-        for element in kwargs['headers'].items():
-            header = " -H '%s: %s'" % element
-            string_parts.append(header)
-        data = kwargs['data']
-        string_parts.append("'" + data + "'")
+        if method != 'GET':
+            for element in kwargs['headers'].items():
+                header = " -H '%s: %s'" % element
+                string_parts.append(header)
+            string_parts.append('--data')
+            data = kwargs['data']
+            data_str = urllib.urlencode(data)
+            data_str = "'" + data_str + "'"
+            string_parts.append(data_str)
+        print("REQ: %s" % " ".join(string_parts))
         _logger.debug("REQ: %s" % " ".join(string_parts))
 
     def _logger_resp(self, resp):
@@ -78,18 +87,26 @@ class HTTPClient(object):
 
 
 class Manager(object):
-    def __init__(self, api):
+    def __init__(self, api, resource_url):
         self.api = api
+        self.resource_url = resource_url
 
     def _request(self, method, url, body):
         key = self.api.key
         key_id = self.api.key_id
         body['Signature'] = prepare_url.get_signature(
             method, body, key, key_id)
-        return self.api.client.request(method, url, body)
+        final_url = self.resource_url + url
+        return self.api.client.request(method, final_url, data=body)
 
-    def get(self, url, body):
-        return self._request('GET', url, body)
+    def _get(self, body, url=''):
+        key = self.api.key
+        key_id = self.api.key_id
+        body['Signature'] = prepare_url.get_signature(
+            'GET', body, key, key_id)
+        encoded_url = urllib.urlencode(body)
+        final_url = self.resource_url + url + '?' + encoded_url
+        return self.api.client.request('GET', final_url)
 
-    def post(self, url, body):
+    def _post(self, body, url=''):
         return self._request('POST', url, body)

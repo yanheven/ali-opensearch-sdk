@@ -1,4 +1,4 @@
-from opensearchsdk.utils import base
+from opensearchsdk.apiclient import base
 
 
 class UhostManager(base.Manager):

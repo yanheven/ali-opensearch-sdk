@@ -61,4 +61,4 @@ target/
 
 # secret
 build.txt
-key.py
+mykey.py
