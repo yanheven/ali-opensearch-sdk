@@ -25,7 +25,7 @@ if __name__ == '__main__':
     key = mykey.KEY['key_secrete']
     key_id = mykey.KEY['key_id']
     client = Client(url, key, key_id)
-    apps = client.app.get()
+    apps = client.app.get(page=1, page_size=1)
     print(apps)
     '''
     {

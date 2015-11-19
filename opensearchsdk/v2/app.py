@@ -13,9 +13,9 @@ class AppManager(base.Manager):
         """
         body = {}
         if page is not None:
-            body['page'] = page
+            body['page'] = str(page)
         if page_size is not None:
-            body['page_size'] = page_size
+            body['page_size'] = str(page_size)
 
         return self._post(body)
 
