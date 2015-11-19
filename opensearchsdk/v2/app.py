@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from opensearchsdk.apiclient import base
+from opensearchsdk.apiclient import api_base
 
 
-class AppManager(base.Manager):
+class AppManager(api_base.Manager):
     """Application resource manage class"""
     def get(self, page=None, page_size=None):
         """

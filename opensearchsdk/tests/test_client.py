@@ -1,15 +1,16 @@
-# from testtools import TestCase
-#
-# from opensearchsdk import client
-#
-#
-# class ClientTest(TestCase):
-#     def test_client_get_reset_timings(self):
-#         cs = client.Client('base_url', 'public_key', 'private_key')
-#         self.assertEqual(0, len(cs.get_timing()))
-#         cs.client.time.append("somevalue")
-#         self.assertEqual(1, len(cs.get_timing()))
-#         self.assertEqual("somevalue", cs.get_timing()[0])
-#
-#         cs.reset_timing()
-#         self.assertEqual(0, len(cs.get_timing()))
+from opensearchsdk import client
+from opensearchsdk.tests import base
+
+
+URL = 'http://www.aliyun.com'
+KEY = 'KEY'
+KEY_ID = 'KEY_ID'
+
+
+class ClientTest(base.TestCase):
+    def test_passing_property(self):
+        c = client.Client(URL, KEY, KEY_ID)
+        self.assertEqual(KEY, c.key)
+        self.assertEqual(URL, c.http_client.base_url)
+        self.assertEqual(client.APP_URL, c.app.resource_url)
+        self.assertEqual(c, c.app.api)

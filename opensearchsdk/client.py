@@ -1,26 +1,30 @@
-# -*- encoding: utf-8 -*-
 '''
 opensearch python sdk client.
 '''
-from opensearchsdk.apiclient import base
+from opensearchsdk.apiclient import api_base
 from opensearchsdk.v2 import app
 
 
+APP_URL = '/index'
+
+
 class Client(object):
-    '''
-    opensearch python sdk client.
-    '''
+    """opensearch python sdk client."""
 
     def __init__(self, base_url, key, key_id):
         self.base_url = base_url
         self.key = key
         self.key_id = key_id
-        self.app = app.AppManager(self, '/index')
-        self.client = base.HTTPClient(base_url)
+        self.http_client = api_base.HTTPClient(base_url)
+        self.app = app.AppManager(self, APP_URL)
 
 
 if __name__ == '__main__':
     import mykey
+    import logging
+    LOG = logging.basicConfig(level=logging.DEBUG,
+                              format="[%(asctime)s] %(name)s:"
+                                     "%(levelname)s: %(message)s")
     url = 'http://opensearch-cn-hangzhou.aliyuncs.com'
     key = mykey.KEY['key_secrete']
     key_id = mykey.KEY['key_id']

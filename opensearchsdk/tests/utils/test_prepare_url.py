@@ -1,8 +1,9 @@
-# _*_ encoding: utf-8 _*_
+# -*- encoding: utf-8 -*-
 import mock
-from testtools import TestCase
 
 from opensearchsdk.utils import prepare_url
+from opensearchsdk.tests import base
+
 
 COMMON_PARAMS = {'Version': 'v2',
                  'AccessKeyId': 'testid',
@@ -32,7 +33,7 @@ STEP_2 = "GET&%2F&AccessKeyId%3Dtestid%26SignatureMethod%3DHMAC-SHA1%26Signatu" 
          "ery%253A%2527%25E7%259A%2584%2527"
 SAFE = {' ': '%20', '~': '~'}
 
-class TokenTest(TestCase):
+class TokenTest(base.TestCase):
 
     def test_get_common_params(self):
         common_params = prepare_url.get_common_params(KEY_ID)
