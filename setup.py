@@ -15,10 +15,7 @@ setup(
 
     include_package_data=True,
     platforms='python2.7',
-    # install_requires=['PrettyTable>=0.7,<0.8', 'six>=1.9.0'],
-    entry_points={
-        'console_scripts': [],
-    },
+    install_requires=['requests',],
     classifiers = ['Operating System :: MacOS',
                    'Operating System :: Microsoft :: Windows',
                    'Operating System :: POSIX :: Linux']
