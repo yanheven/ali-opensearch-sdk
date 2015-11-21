@@ -26,5 +26,3 @@ class TestResponse(requests.Response):
     def raise_for_status(self):
         pass
 
-    def __call__(self, *args, **kwargs):
-        pass
