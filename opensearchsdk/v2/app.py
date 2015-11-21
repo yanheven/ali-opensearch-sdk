@@ -4,7 +4,7 @@ from opensearchsdk.apiclient import api_base
 
 class AppManager(api_base.Manager):
     """Application resource manage class"""
-    def get(self, page=None, page_size=None):
+    def list(self, page=None, page_size=None):
         """
         get application list with given page and page size.
         :param page:

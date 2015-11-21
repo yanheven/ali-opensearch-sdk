@@ -19,7 +19,7 @@ There are 7 type of resources provided by opensearch, they are:
 
 There are 5 Operation for almost all resources, they are CURD as follow:  
 
-1, get: list all of this type of resources.    
+1, list: list all of this type of resources.    
 2, show: show detail information of a specific resource.      
 3,4,5, CUD: create, update and delete a specific resource.
 
@@ -41,7 +41,7 @@ Or, From Source code:
 
     from opensearchsdk.client import Client as osclient
     client = osclient(base_url, key, key_id)
-    apps = client.app.get()
+    apps = client.app.list()
     print apps
 
 output:
@@ -60,6 +60,7 @@ output:
         u'request_id': u'1447866418002866600607068'
     }
 
+More examples can be found in `opensearchsdk/demo.py`.  
 Note: All return data from server were remained. 
 
 #### 4, Contribute and BUG:
