@@ -22,8 +22,8 @@ def get_common_params(key_id):
     params = dict(Version="v2",
                   SignatureMethod="HMAC-SHA1",
                   SignatureVersion="1.0",
-                  Timestamp=
-                  time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                  Timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                          time.gmtime()),
                   SignatureNonce=str(uuid.uuid4()),
                   AccessKeyId=key_id
                   )
@@ -60,4 +60,3 @@ def get_signature(method, body, key, key_id):
     str_to_sign = get_str_to_sign(quote_body, method)
     signature = sign_str(key, str_to_sign)
     return signature
-

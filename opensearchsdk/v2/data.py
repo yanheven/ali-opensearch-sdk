@@ -13,5 +13,3 @@ class DataManager(api_base.Manager):
         """
         body = dict(table_name=table_name, items=items)
         return self.send_post(body)
-
-

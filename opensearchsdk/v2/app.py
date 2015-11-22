@@ -18,4 +18,3 @@ class AppManager(api_base.Manager):
             body['page_size'] = str(page_size)
 
         return self.send_post(body)
-
