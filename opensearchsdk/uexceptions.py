@@ -42,7 +42,3 @@ class BadParameters(Exception):
 
     def __str__(self):
         return "BadParameters: %s" % repr(self.response)
-<<<<<<< HEAD
-=======
-
->>>>>>> 0157a31257ed8b3ef405880d0a6816dbf771377b

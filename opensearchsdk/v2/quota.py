@@ -6,4 +6,3 @@ class QuotaManager(api_base.Manager):
     """TODO(Yan Haifeng) not yet implement
     Quota resource manage class
     """
-

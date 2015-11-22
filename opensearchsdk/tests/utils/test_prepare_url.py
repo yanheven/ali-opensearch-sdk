@@ -40,9 +40,13 @@ class TokenTest(base.TestCase):
         common_params = prepare_url.get_common_params(KEY_ID)
         self.assertEqual(6, len(common_params))
         self.assertEqual(COMMON_PARAMS['Version'], common_params['Version'])
-        self.assertEqual(COMMON_PARAMS['AccessKeyId'], common_params['AccessKeyId'])
-        self.assertEqual(COMMON_PARAMS['SignatureMethod'], common_params['SignatureMethod'])
-        self.assertEqual(COMMON_PARAMS['SignatureVersion'], common_params['SignatureVersion'])
+        self.assertEqual(
+            COMMON_PARAMS['AccessKeyId'], common_params['AccessKeyId'])
+        self.assertEqual(
+            COMMON_PARAMS['SignatureMethod'], common_params['SignatureMethod'])
+        self.assertEqual(
+            COMMON_PARAMS['SignatureVersion'],
+            common_params['SignatureVersion'])
         self.assertEqual(20, len(common_params['Timestamp']))
 
     def test_url_quote(self):
@@ -65,7 +69,7 @@ class TokenTest(base.TestCase):
         self.assertEqual(SIGNATURE, signature)
 
     @mock.patch('opensearchsdk.utils.prepare_url.get_common_params',
-                return_value=COMMON_PARAMS)
+                mock.Mock(return_value=COMMON_PARAMS))
     def test_get_signature(self):
         signature = prepare_url.get_signature(METHOD, BODY, KEY, KEY_ID)
         self.assertEqual(SIGNATURE, signature)

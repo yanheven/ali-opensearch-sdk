@@ -44,7 +44,8 @@ class HTTPClientTest(base.TestCase):
 
         def get():
             resp = http_client.request(GET, RESOURCE_URL)
-            mock_req.assert_called_with(GET, URL + RESOURCE_URL, headers=HEADERS)
+            mock_req.assert_called_with(
+                GET, URL + RESOURCE_URL, headers=HEADERS)
             self.assertEqual(BODY, resp)
 
         def post():
@@ -88,7 +89,7 @@ class ManagerTest(base.TestCase):
         mock_urlencode.assert_called_with(BODY)
         self.assertEqual(FAKE_RESP, resp)
 
-    @mock.patch.object(api_base.Manager, '_request')
+    @mock.patch.object(api_base.Manager, 'send_request')
     def test_post(self, mock_request):
         mock_request.return_value = FAKE_RESP
         manager = api_base.Manager(FakeClient, RESOURCE_URL)
@@ -96,18 +97,3 @@ class ManagerTest(base.TestCase):
 
         mock_request.assert_called_with(POST, SPEC_URL, BODY)
         self.assertEqual(FAKE_RESP, resp)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
