@@ -2,6 +2,8 @@ nguage: python
 python:
   - "2.7"
 # command to install dependencies
-install: "sudo pip install -r requirements.txt"
+install: 
+ -"sudo pip install -r requirements.txt"
+ -"sudo pip install -r test-requirements.txt"
 # command to run tests
 script: python -m testtools.run
