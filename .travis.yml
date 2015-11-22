@@ -5,5 +5,8 @@ python:
 install: 
   - sudo pip install -r requirements.txt
   - sudo pip install -r test-requirements.txt
+  - sudo pip install coverage
+  - sudo pip install coveralls
 # command to run tests
-script: python -m testtools.run
+script: coverage run --source=opensearchsdk setup.py test
+after_success: coveralls
