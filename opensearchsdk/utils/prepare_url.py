@@ -23,7 +23,7 @@ def get_common_params(key_id):
                   SignatureMethod="HMAC-SHA1",
                   SignatureVersion="1.0",
                   Timestamp=
-                    time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                  time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                   SignatureNonce=str(uuid.uuid4()),
                   AccessKeyId=key_id
                   )

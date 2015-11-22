@@ -17,5 +17,5 @@ class AppManager(api_base.Manager):
         if page_size is not None:
             body['page_size'] = str(page_size)
 
-        return self._post(body)
+        return self.send_post(body)
 

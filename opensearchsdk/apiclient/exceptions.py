@@ -1,4 +1,3 @@
-import six
 class HttpException(Exception):
     """base exception for http request"""
     def __init__(self, message=None, details=None, status_code=None):

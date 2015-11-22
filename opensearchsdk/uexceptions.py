@@ -44,5 +44,3 @@ class BadParameters(Exception):
         return "BadParameters: %s" % repr(self.response)
 
 
-class CommandError(Exception):
-    pass

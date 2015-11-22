@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup(
     name='ali-opensearch',
@@ -15,7 +15,7 @@ setup(
 
     include_package_data=True,
     platforms='python2.7',
-    install_requires=['requests',],
+    install_requires=['requests', 'six'],
     classifiers = ['Operating System :: MacOS',
                    'Operating System :: Microsoft :: Windows',
                    'Operating System :: POSIX :: Linux']
