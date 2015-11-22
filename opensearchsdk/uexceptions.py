@@ -42,7 +42,3 @@ class BadParameters(Exception):
 
     def __str__(self):
         return "BadParameters: %s" % repr(self.response)
-
-
-class CommandError(Exception):
-    pass

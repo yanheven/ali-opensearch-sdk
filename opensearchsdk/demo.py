@@ -27,30 +27,30 @@ def list_app(client):
 def creat_data_process(client):
     table_name = 'test_table'
     items = [
-                {
-                    "cmd": "add",
-                    "timestamp": 1401342874777,
-                    "fields": {
-                        "id": "1",
-                        "title": "This is the title",
-                        "body": "This is the body"
-                    }
-                },
-                {
-                    "cmd": "update",
-                    "timestamp": 1401342874778,
-                    "fields": {
-                        "id": "2",
-                        "title": "This is the new title"
-                    }
-                },
-                {
-                    "cmd": "delete",
-                    "fields": {
-                        "id": "3"
-                    }
-                }
-            ]
+        {
+            "cmd": "add",
+            "timestamp": 1401342874777,
+            "fields": {
+                "id": "1",
+                "title": "This is the title",
+                "body": "This is the body"
+            }
+        },
+        {
+            "cmd": "update",
+            "timestamp": 1401342874778,
+            "fields": {
+                "id": "2",
+                "title": "This is the new title"
+            }
+        },
+        {
+            "cmd": "delete",
+            "fields": {
+                "id": "3"
+            }
+        }
+    ]
     items = json.dumps(items)
     data_ret = client.data.create(table_name, items)
     print(data_ret)
@@ -83,4 +83,3 @@ if __name__ == '__main__':
     client = Client(url, key, key_id)
     list_app(client)
     creat_data_process(client)
-

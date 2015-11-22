@@ -12,6 +12,4 @@ class DataManager(api_base.Manager):
         :return:{"status":"OK","request_id":"10373587"}
         """
         body = dict(table_name=table_name, items=items)
-        return self._post(body)
-
-
+        return self.send_post(body)

@@ -36,7 +36,7 @@ class HTTPClient(object):
                            status_code=resp.status_code)
         try:
             resp_body = resp.json()
-        except ValueError as e:
+        except ValueError:
             raise exceptions.InvalidResponse(response=resp)
         return resp_body
 
@@ -93,7 +93,7 @@ class Manager(object):
         self.api = api
         self.resource_url = resource_url
 
-    def _request(self, method, spec_url, body):
+    def send_request(self, method, spec_url, body):
         key = self.api.key
         key_id = self.api.key_id
         body['Signature'] = prepare_url.get_signature(
@@ -101,7 +101,7 @@ class Manager(object):
         final_url = self.resource_url + spec_url
         return self.api.http_client.request(method, final_url, data=body)
 
-    def _get(self, body, spec_url=''):
+    def send_get(self, body, spec_url=''):
         key = self.api.key
         key_id = self.api.key_id
         body['Signature'] = prepare_url.get_signature(
@@ -110,5 +110,5 @@ class Manager(object):
         final_url = self.resource_url + spec_url + '?' + encoded_url
         return self.api.http_client.request('GET', final_url)
 
-    def _post(self, body, spec_url=''):
-        return self._request('POST', spec_url, body)
+    def send_post(self, body, spec_url=''):
+        return self.send_request('POST', spec_url, body)

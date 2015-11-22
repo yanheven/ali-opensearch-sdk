@@ -19,7 +19,7 @@ BODY = {'query': "config=format:json,start:0,hit:20&&query:'的'",
 METHOD = 'GET'
 KEY_ID = 'testid'
 KEY = 'testsecret'
-SIGNATURE= "fxGidmIYSsx2AMa8onxuavOijuE="
+SIGNATURE = "fxGidmIYSsx2AMa8onxuavOijuE="
 STEP_1 = 'AccessKeyId=testid&SignatureMethod=HMAC-SHA1&SignatureNonce=1405' \
          '3016951271226&SignatureVersion=1.0&Timestamp=2014-07-14T01%3A34%' \
          '3A55Z&Version=v2&fetch_fields=title%3Bgmt_modified&format=json&i' \
@@ -33,15 +33,20 @@ STEP_2 = "GET&%2F&AccessKeyId%3Dtestid%26SignatureMethod%3DHMAC-SHA1%26Signatu" 
          "ery%253A%2527%25E7%259A%2584%2527"
 SAFE = {' ': '%20', '~': '~'}
 
+
 class TokenTest(base.TestCase):
 
     def test_get_common_params(self):
         common_params = prepare_url.get_common_params(KEY_ID)
         self.assertEqual(6, len(common_params))
         self.assertEqual(COMMON_PARAMS['Version'], common_params['Version'])
-        self.assertEqual(COMMON_PARAMS['AccessKeyId'], common_params['AccessKeyId'])
-        self.assertEqual(COMMON_PARAMS['SignatureMethod'], common_params['SignatureMethod'])
-        self.assertEqual(COMMON_PARAMS['SignatureVersion'], common_params['SignatureVersion'])
+        self.assertEqual(
+            COMMON_PARAMS['AccessKeyId'], common_params['AccessKeyId'])
+        self.assertEqual(
+            COMMON_PARAMS['SignatureMethod'], common_params['SignatureMethod'])
+        self.assertEqual(
+            COMMON_PARAMS['SignatureVersion'],
+            common_params['SignatureVersion'])
         self.assertEqual(20, len(common_params['Timestamp']))
 
     def test_url_quote(self):
@@ -64,7 +69,7 @@ class TokenTest(base.TestCase):
         self.assertEqual(SIGNATURE, signature)
 
     @mock.patch('opensearchsdk.utils.prepare_url.get_common_params',
-                return_value = COMMON_PARAMS)
-    def test_get_signature(self, get_common_params):
+                mock.Mock(return_value=COMMON_PARAMS))
+    def test_get_signature(self):
         signature = prepare_url.get_signature(METHOD, BODY, KEY, KEY_ID)
         self.assertEqual(SIGNATURE, signature)

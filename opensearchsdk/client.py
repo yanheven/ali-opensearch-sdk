@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
-'''
+"""
 opensearch python sdk client.
-'''
+"""
 from opensearchsdk.apiclient import api_base
 from opensearchsdk.v2 import app
 from opensearchsdk.v2 import data
@@ -18,7 +18,7 @@ SEARCH_URL = '/search'
 INDEX_URL = '/index'
 SUGGEST_URL = '/suggest'
 QUOTA_URL = ''
-#TODO(Yan Haifeng) not yet implement
+# TODO(Yan Haifeng) not yet implement
 LOG_URL = APP_URL + '/error'
 
 
@@ -36,5 +36,5 @@ class Client(object):
         self.suggest = suggest.SuggestManager(self, SUGGEST_URL)
         self.index = index.IndexManager(self, INDEX_URL)
         self.quota = quota.QuotaManager(self, QUOTA_URL)
-        #TODO(Yan Haifeng) not yet implement
+        # TODO(Yan Haifeng) not yet implement
         self.log = log.LogManager(self, LOG_URL)
