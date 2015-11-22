@@ -1,0 +1,5 @@
+platform: linux # | osx
+build: python setup.py install
+test: python -m testtools.run
+analyzers:
+ - flake8: true
