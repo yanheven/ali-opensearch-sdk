@@ -21,9 +21,9 @@ class HTTPClient(object):
         kwargs.setdefault("headers", {})
         kwargs["headers"]["User-Agent"] = USER_AGENT
         kwargs["headers"]["Content-Type"] = 'application/x-www-form-urlencoded'
-        self._logger_req(method, url, **kwargs)
+        # self._logger_req(method, url, **kwargs)
         resp = requests.request(method, url, **kwargs)
-        self._logger_resp(resp)
+        # self._logger_resp(resp)
         try:
             resp.raise_for_status()
         except requests.RequestException as e:

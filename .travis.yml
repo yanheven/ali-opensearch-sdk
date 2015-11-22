@@ -8,5 +8,5 @@ install:
   - sudo pip install coverage
   - sudo pip install coveralls
 # command to run tests
-script: coverage run --source=opensearchsdk setup.py test
+script: nosetests --with-coverage --cover-erase --cover-package=opensearchsdk
 after_success: coveralls
