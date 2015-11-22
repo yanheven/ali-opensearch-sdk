@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yanheven/ali-opensearch-sdk.svg?branch=master)](https://travis-ci.org/yanheven/ali-opensearch-sdk)
+[![Coverage Status](https://coveralls.io/repos/yanheven/ali-opensearch-sdk/badge.svg?branch=master&service=github)](https://coveralls.io/github/yanheven/ali-opensearch-sdk?branch=master)
 ### Aliyun OpenSearch Python SDK
 
 ali-opensearch-sdk is a python sdk for [Aliyun OpenSearch](http://www.aliyun.com/product/opensearch) Product.    
@@ -66,6 +68,7 @@ Note: All return data from server were remained.
 #### 4, Contribute and BUG:
 This project was managed via [Launchpad](https://launchpad.net/ali-opensearch-python-sdk).  
 Welcome to log bugs and commit patch.
+Code style follow the PEP8 rules.
 
 #### 5, License：
 Apache License Version 2.0
