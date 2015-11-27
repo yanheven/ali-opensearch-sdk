@@ -18,7 +18,8 @@ class HttpException(Exception):
 
 class NotFoundException(HttpException):
     """404"""
-    pass
+    def __init__(self, message=None, details=None, status_code=None):
+        super(NotFoundException, self).__init__(message, details, status_code)
 
 
 class InvalidResponse(HttpException):

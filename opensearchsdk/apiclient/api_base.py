@@ -47,45 +47,46 @@ class HTTPClient(object):
         except ValueError:
             pass
         return resp.text
-
-    def _logger_req(self, method, url, **kwargs):
-        if not _logger.isEnabledFor(logging.DEBUG):
-            return
-        string_parts = [
-            "curl -i",
-            "-X '%s'" % method,
-            "'%s'" % url,
-        ]
-        if method != 'GET':
-            for element in kwargs['headers'].items():
-                header = " -H '%s: %s'" % element
-                string_parts.append(header)
-            string_parts.append('--data')
-            data = kwargs['data']
-            data_str = urllib.urlencode(data)
-            data_str = "'" + data_str + "'"
-            string_parts.append(data_str)
-        print("REQ: %s" % " ".join(string_parts))
-        _logger.debug("REQ: %s" % " ".join(string_parts))
-
-    def _logger_resp(self, resp):
-        if not _logger.isEnabledFor(logging.DEBUG):
-            return
-        _logger.debug(
-            "RESP: [%s] %r" % (
-                resp.status_code,
-                resp.headers,
-            ),
-        )
-        # if resp._content_consumed:
-        #     _logger.debug(
-        #         "RESP BODY: %s",
-        #         resp.text,
-        #     )
-        _logger.debug(
-            "encoding: %s",
-            resp.encoding,
-        )
+    #
+    # def _logger_req(self, method, url, **kwargs):
+    #     if not _logger.isEnabledFor(logging.DEBUG):
+    #         return
+    #     string_parts = [
+    #         "curl -i",
+    #         "-X '%s'" % method,
+    #         "'%s'" % url,
+    #     ]
+    #     if method != 'GET':
+    #         for element in kwargs['headers'].items():
+    #             header = " -H '%s: %s'" % element
+    #             string_parts.append(header)
+    #         string_parts.append('--data')
+    #         data = kwargs.get('data', '')
+    #         if data:
+    #             data_str = urllib.urlencode(data)
+    #             data_str = "'" + data_str + "'"
+    #             string_parts.append(data_str)
+    #     print("REQ: %s" % " ".join(string_parts))
+    #     _logger.debug("REQ: %s" % " ".join(string_parts))
+    #
+    # def _logger_resp(self, resp):
+    #     if not _logger.isEnabledFor(logging.DEBUG):
+    #         return
+    #     _logger.debug(
+    #         "RESP: [%s] %r" % (
+    #             resp.status_code,
+    #             resp.headers,
+    #         ),
+    #     )
+    #     # if resp._content_consumed:
+    #     #     _logger.debug(
+    #     #         "RESP BODY: %s",
+    #     #         resp.text,
+    #     #     )
+    #     _logger.debug(
+    #         "encoding: %s",
+    #         resp.encoding,
+    #     )
 
 
 class Manager(object):

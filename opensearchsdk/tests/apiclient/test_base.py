@@ -2,7 +2,9 @@ import mock
 import requests
 
 from opensearchsdk.apiclient import api_base
+from opensearchsdk.apiclient import exceptions
 from opensearchsdk.tests import base
+from opensearchsdk.utils import prepare_url
 
 
 URL = 'http://www.aliyun.com'
@@ -22,10 +24,17 @@ POST = 'POST'
 FAKE_RESP = {
     "status_code": 200,
     "text": BODY}
-
-
-def fake_resp():
-    return base.TestResponse(FAKE_RESP)
+FAKE_INVALID_RESP = {
+    "status_code": 200,
+    "text": BODY,
+    "raise_e": ValueError}
+RESP_404 = {
+    "status_code": 404,
+    "text": BODY,
+    "raise_e": ValueError}
+RESP_400 = {
+    "status_code": 400,
+    "text": BODY}
 
 
 class FakeClient(object):
@@ -34,66 +43,85 @@ class FakeClient(object):
     http_client = api_base.HTTPClient(URL)
 
 
-mock_req = mock.Mock(return_value=base.TestResponse(FAKE_RESP))
-
-
 class HTTPClientTest(base.TestCase):
-    @mock.patch.object(requests, 'request', mock_req)
-    def test_request(self):
-        http_client = http_client = api_base.HTTPClient(URL)
+    def setUp(self):
+        super(HTTPClientTest, self).setUp()
+        self.ori_request = requests.request
+        requests.request = mock.Mock(
+            return_value=base.TestResponse(FAKE_RESP))
+        self.http_client = api_base.HTTPClient(URL)
 
-        def get():
-            resp = http_client.request(GET, RESOURCE_URL)
-            mock_req.assert_called_with(
-                GET, URL + RESOURCE_URL, headers=HEADERS)
-            self.assertEqual(BODY, resp)
+    def tearDown(self):
+        super(HTTPClientTest, self).tearDown()
+        requests.request = self.ori_request
 
-        def post():
-            resp = http_client.request(POST, RESOURCE_URL)
-            mock_req.assert_called_with(
-                POST, URL + RESOURCE_URL, headers=HEADERS)
-            self.assertEqual(BODY, resp)
+    def test_request_get(self):
+        resp = self.http_client.request(GET, RESOURCE_URL)
+        requests.request.assert_called_with(
+            GET, URL + RESOURCE_URL, headers=HEADERS)
+        self.assertEqual(BODY, resp)
 
-        get()
-        post()
+    def test_request_post(self):
+        resp = self.http_client.request(POST, RESOURCE_URL)
+        requests.request.assert_called_with(
+            POST, URL + RESOURCE_URL, headers=HEADERS)
+        self.assertEqual(BODY, resp)
+
+    @mock.patch.object(requests, 'request',
+                       return_value=base.TestResponse(FAKE_INVALID_RESP))
+    def test_invalid_response(self, mock_req):
+        self.assertRaises(exceptions.InvalidResponse,
+                          self.http_client.request, POST, RESOURCE_URL)
+
+    @mock.patch.object(requests, 'request',
+                       return_value=base.TestResponse(RESP_404))
+    def test_request_404(self, mock_req):
+        self.assertEqual('NotFoundException: NotFoundException, app',
+                         str(exceptions.NotFoundException(details='app')))
+        self.assertRaises(exceptions.NotFoundException,
+                          self.http_client.request, POST, RESOURCE_URL)
+
+    @mock.patch.object(requests, 'request',
+                       return_value=base.TestResponse(RESP_400))
+    def test_request_400(self, mock_req):
+        self.assertRaises(exceptions.HttpException,
+                          self.http_client.request, POST, RESOURCE_URL)
 
 
 class ManagerTest(base.TestCase):
+    def setUp(self):
+        super(ManagerTest, self).setUp()
+        self.ori_request = api_base.HTTPClient.request
+        self.ori_get_signature = prepare_url.get_signature
+        api_base.HTTPClient.request = mock.Mock(return_value=FAKE_RESP)
+        prepare_url.get_signature = mock.Mock(return_value=SIGN)
+        self.manager = api_base.Manager(FakeClient, RESOURCE_URL)
 
-    @mock.patch.object(api_base.HTTPClient, 'request')
-    @mock.patch('opensearchsdk.utils.prepare_url.get_signature')
-    def test_request(self, mock_get_sign, mock_http):
-        mock_http.return_value = FAKE_RESP
-        mock_get_sign.return_value = SIGN
-        manager = api_base.Manager(FakeClient, RESOURCE_URL)
-        resp = manager.send_request(GET, SPEC_URL, BODY)
+    def tearDown(self):
+        super(ManagerTest, self).tearDown()
+        api_base.HTTPClient.request = self.ori_request
+        prepare_url.get_signature = self.ori_get_signature
 
-        mock_http.assert_called_with(
+    def test_request(self):
+        resp = self.manager.send_request(GET, SPEC_URL, BODY)
+        api_base.HTTPClient.request.assert_called_with(
             GET, RESOURCE_URL+SPEC_URL, data=SIGNED_BODY)
-        mock_get_sign.assert_called_with(GET, BODY, KEY, KEY_ID)
+        prepare_url.get_signature.assert_called_with(GET, BODY, KEY, KEY_ID)
         self.assertEqual(FAKE_RESP, resp)
 
-    @mock.patch.object(api_base.HTTPClient, 'request')
-    @mock.patch('opensearchsdk.utils.prepare_url.get_signature')
     @mock.patch('urllib.urlencode')
-    def test_get(self, mock_urlencode, mock_get_sign, mock_http):
-        mock_http.return_value = FAKE_RESP
-        mock_get_sign.return_value = SIGN
+    def test_get(self, mock_urlencode):
         mock_urlencode.return_value = ENCODE_BODY
-        manager = api_base.Manager(FakeClient, RESOURCE_URL)
-        resp = manager.send_get(BODY, SPEC_URL)
+        resp = self.manager.send_get(BODY, SPEC_URL)
 
-        mock_http.assert_called_with(
-            GET, RESOURCE_URL+SPEC_URL+'?'+ENCODE_BODY)
-        mock_get_sign.assert_called_with(GET, BODY, KEY, KEY_ID)
+        prepare_url.get_signature.assert_called_with(GET, BODY, KEY, KEY_ID)
         mock_urlencode.assert_called_with(BODY)
         self.assertEqual(FAKE_RESP, resp)
 
     @mock.patch.object(api_base.Manager, 'send_request')
     def test_post(self, mock_request):
         mock_request.return_value = FAKE_RESP
-        manager = api_base.Manager(FakeClient, RESOURCE_URL)
-        resp = manager.send_post(BODY, SPEC_URL)
+        resp = self.manager.send_post(BODY, SPEC_URL)
 
         mock_request.assert_called_with(POST, SPEC_URL, BODY)
         self.assertEqual(FAKE_RESP, resp)
