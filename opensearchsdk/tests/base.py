@@ -17,9 +17,9 @@ class TestResponse(requests.Response):
         self.headers = data.get('headers')
         self._text = data.get('text')
         self.raise_e = data.get('raise_e', '')
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+    #
+    # def __eq__(self, other):
+    #     return self.__dict__ == other.__dict__
 
     def json(self):
         if self.raise_e:
