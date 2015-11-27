@@ -72,14 +72,14 @@ def creat_data_process(client):
 
 
 if __name__ == '__main__':
-    import opensearchsdk.mykey
+    from opensearchsdk import mykey
     import logging
     LOG = logging.basicConfig(level=logging.DEBUG,
                               format="[%(asctime)s] %(name)s:"
                                      "%(levelname)s: %(message)s")
     url = 'http://opensearch-cn-hangzhou.aliyuncs.com'
-    key = opensearchsdk.mykey.KEY['key_secrete']
-    key_id = opensearchsdk.mykey.KEY['key_id']
+    key = mykey.KEY['key_secrete']
+    key_id = mykey.KEY['key_id']
     client = Client(url, key, key_id)
     list_app(client)
     creat_data_process(client)
