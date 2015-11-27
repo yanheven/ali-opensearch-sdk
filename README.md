@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/yanheven/ali-opensearch-sdk.svg?branch=master)](https://travis-ci.org/yanheven/ali-opensearch-sdk)
 [![Coverage Status](https://coveralls.io/repos/yanheven/ali-opensearch-sdk/badge.svg?branch=master&service=github)](https://coveralls.io/github/yanheven/ali-opensearch-sdk?branch=master)
+[![PyPI version](https://badge.fury.io/py/ali-opensearch.svg)](https://badge.fury.io/py/ali-opensearch)  
+
 ### Aliyun OpenSearch Python SDK
 
 ali-opensearch-sdk is a python sdk for [Aliyun OpenSearch](http://www.aliyun.com/product/opensearch) Product.    
