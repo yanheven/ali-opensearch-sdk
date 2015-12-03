@@ -1,8 +1,8 @@
 import requests
-import testtools
+import unittest
 
 
-class TestCase(testtools.TestCase):
+class TestCase(unittest.TestCase):
     """wrap testtools.TestCase"""
     def setUp(self):
         super(TestCase, self).setUp()

@@ -24,6 +24,21 @@ def list_app(client):
     '''
 
 
+def create_app(client):
+    app = client.app.create('test_app', 'a')
+    print(app)
+    '''
+    {
+        u'status': u'OK',
+        u'result': {
+                        u'index_name': u'test_app'
+                    },
+        u'request_id': u'1449146731021309800470027'
+    }
+
+    '''
+
+
 def creat_data_process(client):
     table_name = 'test_table'
     items = [
@@ -81,5 +96,6 @@ if __name__ == '__main__':
     key = mykey.KEY['key_secrete']
     key_id = mykey.KEY['key_id']
     client = Client(url, key, key_id)
-    list_app(client)
-    creat_data_process(client)
+    # list_app(client)
+    # creat_data_process(client)
+    create_app(client)

@@ -4,7 +4,7 @@ import requests
 from opensearchsdk.apiclient import api_base
 from opensearchsdk.apiclient import exceptions
 from opensearchsdk.tests import base
-from opensearchsdk.utils import prepare_url
+from opensearchsdk.lib import prepare_url
 
 
 URL = 'http://www.aliyun.com'
@@ -46,14 +46,9 @@ class FakeClient(object):
 class HTTPClientTest(base.TestCase):
     def setUp(self):
         super(HTTPClientTest, self).setUp()
-        self.ori_request = requests.request
         requests.request = mock.Mock(
             return_value=base.TestResponse(FAKE_RESP))
         self.http_client = api_base.HTTPClient(URL)
-
-    def tearDown(self):
-        super(HTTPClientTest, self).tearDown()
-        requests.request = self.ori_request
 
     def test_request_get(self):
         resp = self.http_client.request(GET, RESOURCE_URL)

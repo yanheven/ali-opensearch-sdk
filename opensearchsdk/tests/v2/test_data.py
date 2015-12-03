@@ -13,14 +13,7 @@ class AppTest(base.TestCase):
         super(AppTest, self).setUp()
         self.data_manager = DataManager('', '')
         mock_send = mock.Mock(return_value=FAKE_RESP)
-        self.ori_get = Manager.send_get
-        self.ori_post = Manager.send_post
         Manager.send_get = Manager.send_post = mock_send
-
-    def tearDown(self):
-        super(AppTest, self).tearDown()
-        Manager.send_get = self.ori_get
-        Manager.send_post = self.ori_post
 
     def test_list(self):
         resp = self.data_manager.create('1', '2')

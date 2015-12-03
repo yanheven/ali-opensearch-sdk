@@ -13,16 +13,23 @@ class AppTest(base.TestCase):
         super(AppTest, self).setUp()
         self.app_manager = AppManager('', '')
         mock_send = mock.Mock(return_value=FAKE_RESP)
-        self.ori_get = Manager.send_get
-        self.ori_post = Manager.send_post
         Manager.send_get = Manager.send_post = mock_send
-
-    def tearDown(self):
-        super(AppTest, self).tearDown()
-        Manager.send_get = self.ori_get
-        Manager.send_post = self.ori_post
 
     def test_list(self):
         resp = self.app_manager.list(1, 2)
         self.assertEqual(FAKE_RESP, resp)
         Manager.send_post.assert_called_with({'page': '1', 'page_size': '2'})
+
+    def test_create(self):
+        self.app_manager.create('a', 'b')
+        Manager.send_post.assert_called_with({'action': 'create',
+                                              'template': 'b'},
+                                             '/a')
+
+    def test_delete(self):
+        self.app_manager.delete('a')
+        Manager.send_post.assert_called_with({'action': 'delete'}, '/a')
+
+    def test_get(self):
+        self.app_manager.get('a')
+        Manager.send_post.assert_called_with({'action': 'status'}, '/a')
