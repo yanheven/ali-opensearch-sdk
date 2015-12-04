@@ -4,7 +4,7 @@ import requests
 from opensearchsdk.apiclient import api_base
 from opensearchsdk.apiclient import exceptions
 from opensearchsdk.tests import base
-from opensearchsdk.lib import prepare_url
+from opensearchsdk.utils import prepare_url
 
 
 URL = 'http://www.aliyun.com'

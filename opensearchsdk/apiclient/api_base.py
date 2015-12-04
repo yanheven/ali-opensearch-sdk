@@ -4,7 +4,7 @@ import requests
 import urllib
 
 from opensearchsdk.apiclient import exceptions
-from opensearchsdk.lib import prepare_url
+from opensearchsdk.utils import prepare_url
 
 
 USER_AGENT = 'ali-opensearch-python-client'
