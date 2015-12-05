@@ -15,7 +15,7 @@ setup(
 
     include_package_data=True,
     platforms='python2.7',
-    install_requires=['requests', 'six'],
+    install_requires=['requests'],
     classifiers=['Operating System :: MacOS',
                  'Operating System :: Microsoft :: Windows',
                  'Operating System :: POSIX :: Linux']

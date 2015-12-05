@@ -86,6 +86,89 @@ def creat_data_process(client):
     '''
 
 
+def search(client):
+    # simple search
+    body = dict(index_name='test_app',
+                query='query=id:"0"',
+                fetch_fields='testname',
+                first_formula_name='default',
+                formula_name='default',
+                summary='summary_snipped:1,summary_field:title,summ'
+                        'ary_element:high,summary_len:32,summary_el'
+                        'lipsis:...;summary_snipped:2,summary_field'
+                        ':body,summary_element:high,summary_len:60,s'
+                        'ummary_ellipsis:...')
+
+    def simple_search():
+        res = client.search.search(**body)
+        print(res)
+        '''
+        {
+            u'status': u'OK',
+            u'tracer': u'',
+            u'errors': [],
+            u'result': {
+                            u'searchtime': 0.005986,
+                            u'items': [
+                                        {
+                                            u'index_name': u'test_app',
+                                            u'testname': u'0',
+                                        }
+                                    ],
+                            u'facet': [],
+                            u'viewtotal': 1,
+                            u'num': 1,
+                            u'total': 1
+                        },
+            u'request_id': u'144932743917790790023680'
+        }
+        '''
+
+    def combine_search_1():
+        # first combine search
+        body['scroll'] = '1h'
+        body['search_type'] = 'scan'
+        res = client.search.search(**body)
+        print(res)
+        '''
+        {
+            u'status': u'OK',
+            u'tracer': u'',
+            u'errors': [],
+            u'result': {
+                            u'scroll_id': u'eJyNjk1LxDAQhn9NcizdZNnSQw+rXkTUk
+                            +dQk2k7ki8zqW7315sWhRUVhAwZnnmHZ45aA9EdLLemexpz87
+                            Ab8f7t0b2fw5kr21NWek4UUjdgoozeQyKdgrVouCqdVXCKKqO
+                            Dbrfft1KKRtZt2/ABsp7UgGANdRko+94BR2/gpNZ2Y6qPkb/O
+                            kJZOBz/gyOTNEJLrM5PHFwqeiUN5W6KM0BTMhKhLcZqd68vi5
+                            6/IY4ywJnZMXH/R7YDCMmYLFxwsOPCrZsJxuhhY8AVK8S1rMR
+                            JS4VVVMXn1Uyl+UT4Hs/zfeKj/NH4A34SVcg==',
+                            u'searchtime': 0.002997,
+                            u'items': [],
+                            u'facet': [],
+                            u'viewtotal': 1,
+                            u'num': 0,
+                            u'total': 1
+                        },
+            u'request_id': u'144932913017790788000125'
+        }
+        '''
+        return res.get('result').get('scroll_id')
+
+    def combine_search_2(scroll_id):
+        del body['scroll']
+        body['scroll_id'] = scroll_id
+        res = client.search.search(**body)
+        print(res)
+        '''
+        the same as simple search
+        '''
+
+    simple_search()
+    scroll_id = combine_search_1()
+    combine_search_2(scroll_id)
+
+
 if __name__ == '__main__':
     from opensearchsdk import mykey
     import logging
@@ -98,4 +181,5 @@ if __name__ == '__main__':
     client = Client(url, key, key_id)
     # list_app(client)
     # creat_data_process(client)
-    create_app(client)
+    # create_app(client)
+    search(client)
