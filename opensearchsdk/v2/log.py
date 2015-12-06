@@ -14,7 +14,7 @@ class LogManager(api_base.Manager):
         :return: (json)log content
         """
         body = dict(page=page,
-                    page_size=page_size,
+                    page_size=str(page_size),
                     sort_mode=sort_mode)
         spec_url = '/' + name
 

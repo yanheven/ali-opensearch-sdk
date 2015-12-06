@@ -15,7 +15,7 @@ class AppTest(base.TestCase):
     def test_get(self):
         self.log_manager.get('a', '1', 1, 'ASC')
         body = dict(page='1',
-                    page_size=1,
+                    page_size='1',
                     sort_mode='ASC')
         spec_url = '/a'
         Manager.send_post.assert_called_with(body, spec_url)

@@ -77,4 +77,5 @@ Apache License Version 2.0
 
 #### 6, Release Note：
 1, V2.0.0-dev Provide only few functions of opensearch, not yet cover all functions.
+2, V2.0.0 completed all api functions.
 

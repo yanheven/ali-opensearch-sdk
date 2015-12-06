@@ -169,6 +169,64 @@ def search(client):
     combine_search_2(scroll_id)
 
 
+def suggest(client):
+    res = client.suggest.suggest('的', 'test_app', 's2')
+    print(res)
+    '''
+    {
+        u'errors': [
+            {
+                u'message': u'nosuggesterdataonline',
+                u'code': 2422
+            }
+        ],
+        u'suggestions': [],
+        u'searchtime': 0.034475,
+        u'request_id': u'144937817217790789042028'
+    }
+    '''
+
+
+def index_refactor(client):
+    # only refactor index
+    def refactor_only():
+        res = client.index.refactor('test_app')
+        print(res)
+        '''
+        {
+            u'status': u'OK',
+            u'result': {
+                u'task_id': u'159469'
+            },
+            u'request_id': u'1449378626069143700426870'
+        }
+        '''
+    def refactor_import_data():
+        #  refactor index and import data
+        res = client.index.refactor('test_app', 'import', 'id')
+        print(res)
+
+    # refactor_only()
+    refactor_import_data()
+
+
+def get_error_log(client):
+    res = client.log.get('test_app', '1', 1, 'ASC')
+    print(res)
+    '''
+    {
+        u'status': u'OK',
+        u'result': {
+            u'count': 0,
+            u'items': [],
+            u'page': 1,
+            u'page_size': u'1'
+        },
+        u'request_id': u'1449379073037249300677090'
+    }
+    '''
+
+
 if __name__ == '__main__':
     from opensearchsdk import mykey
     import logging
@@ -182,4 +240,7 @@ if __name__ == '__main__':
     # list_app(client)
     # creat_data_process(client)
     # create_app(client)
-    search(client)
+    # search(client)
+    # suggest(client)
+    # index_refactor(client)
+    # get_error_log(client)

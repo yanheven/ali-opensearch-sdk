@@ -16,5 +16,5 @@ class SuggestManager(api_base.Manager):
         body = dict(query=query,
                     index_name=index_name,
                     suggest_name=suggest_name,
-                    hit=hit)
-        self.send_get(body)
+                    hit=str(hit))
+        return self.send_get(body)

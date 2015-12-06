@@ -17,5 +17,5 @@ class AppTest(base.TestCase):
         body = dict(query='a',
                     index_name='b',
                     suggest_name='c',
-                    hit=1)
+                    hit='1')
         Manager.send_post.assert_called_with(body)
