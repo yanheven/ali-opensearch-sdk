@@ -228,7 +228,7 @@ def get_error_log(client):
 
 
 if __name__ == '__main__':
-    from opensearchsdk import mykey
+    import mykey
     import logging
     LOG = logging.basicConfig(level=logging.DEBUG,
                               format="[%(asctime)s] %(name)s:"
