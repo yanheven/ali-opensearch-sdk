@@ -14,6 +14,7 @@ setup(
     author_email='yanheven@qq.com',
 
     include_package_data=True,
+    platforms='any',
     install_requires=['requests', 'six'],
     classifiers=['Operating System :: MacOS',
                  'Operating System :: Microsoft :: Windows',
