@@ -4,7 +4,7 @@
 
 ### Aliyun OpenSearch Python SDK
 
-ali-opensearch-sdk is a python sdk for [Aliyun OpenSearch](http://www.aliyun.com/product/opensearch) Product.    
+ali-opensearch-sdk is a python(2.7&3.5) sdk for [Aliyun OpenSearch](http://www.aliyun.com/product/opensearch) Product.    
 Based on OpenSearch API version v2.  
 Pypi link：[https://pypi.python.org/pypi/ucloudclient](https://pypi.python.org/pypi/ali-opensearch/2.0.0)  
 Project manage [Launchpad](https://launchpad.net/ali-opensearch-python-sdk)
@@ -78,4 +78,5 @@ Apache License Version 2.0
 #### 6, Release Note：
 1, V2.0.0-dev Provide only few functions of opensearch, not yet cover all functions.
 2, V2.0.0 completed all api functions.
+3, V2.0.1 add compatibility for python3.5.
 

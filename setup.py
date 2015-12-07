@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ali-opensearch',
-    version='2.0.0',
+    version='2.0.1',
     packages=find_packages(),
     keywords=('OpenSearch SDK', 'Ali Cloud'),
     description='Python SDK for OpenSearch of Ali Cloud',
@@ -14,9 +14,11 @@ setup(
     author_email='yanheven@qq.com',
 
     include_package_data=True,
-    platforms='python2.7',
     install_requires=['requests', 'six'],
     classifiers=['Operating System :: MacOS',
                  'Operating System :: Microsoft :: Windows',
-                 'Operating System :: POSIX :: Linux']
+                 'Operating System :: POSIX :: Linux',
+                 'Programming Language :: Python',
+                 'Programming Language :: Python :: 2.7',
+                 'Programming Language :: Python :: 3.5']
 )
