@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
 import logging
 import requests
-import urllib
-
+from six.moves.urllib.parse import urlencode
 from opensearchsdk.apiclient import exceptions
 from opensearchsdk.utils import prepare_url
 
@@ -107,7 +106,7 @@ class Manager(object):
         key_id = self.api.key_id
         body['Signature'] = prepare_url.get_signature(
             'GET', body, key, key_id)
-        encoded_url = urllib.urlencode(body)
+        encoded_url = urlencode(body)
         final_url = self.resource_url + spec_url + '?' + encoded_url
         return self.api.http_client.request('GET', final_url)
 

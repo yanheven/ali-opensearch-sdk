@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import mock
+import six
 
 from opensearchsdk.utils import prepare_url
 from opensearchsdk.tests import base
@@ -66,10 +67,14 @@ class TokenTest(base.TestCase):
 
     def test_sign_str(self):
         signature = prepare_url.sign_str(KEY, STEP_2)
+        if isinstance(signature, six.binary_type):
+            signature = signature.decode()
         self.assertEqual(SIGNATURE, signature)
 
     @mock.patch('opensearchsdk.utils.prepare_url.get_common_params',
                 mock.Mock(return_value=COMMON_PARAMS))
     def test_get_signature(self):
         signature = prepare_url.get_signature(METHOD, BODY, KEY, KEY_ID)
+        if isinstance(signature, six.binary_type):
+            signature = signature.decode()
         self.assertEqual(SIGNATURE, signature)

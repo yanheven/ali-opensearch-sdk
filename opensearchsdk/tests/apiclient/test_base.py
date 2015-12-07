@@ -104,7 +104,7 @@ class ManagerTest(base.TestCase):
         prepare_url.get_signature.assert_called_with(GET, BODY, KEY, KEY_ID)
         self.assertEqual(FAKE_RESP, resp)
 
-    @mock.patch('urllib.urlencode')
+    @mock.patch('opensearchsdk.apiclient.api_base.urlencode')
     def test_get(self, mock_urlencode):
         mock_urlencode.return_value = ENCODE_BODY
         resp = self.manager.send_get(BODY, SPEC_URL)

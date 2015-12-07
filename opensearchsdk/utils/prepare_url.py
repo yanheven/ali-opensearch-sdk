@@ -2,18 +2,23 @@
 import base64
 import hashlib
 import hmac
+import six
 import sys
 import time
-import urllib
 import uuid
+try:
+    from urllib import quote
+except ImportError:
+    from urllib.parse import quote
 
 
 def url_quote(encode_str):
-    if sys.stdin.encoding is None:
-        res = urllib.quote(encode_str.decode('cp936').encode('utf8'), '~')
-    else:
-        res = urllib.quote(
-            encode_str.decode(sys.stdin.encoding).encode('utf8'), '~')
+    if isinstance(encode_str, six.binary_type):
+        if sys.stdin.encoding is None:
+            encode_str = encode_str.decode('cp936').encode('utf8')
+        else:
+            encode_str = encode_str.decode(sys.stdin.encoding).encode('utf8')
+    res = quote(encode_str, '~')
     res = res.replace('+', '%20')
     res = res.replace('*', '%2A')
     return res
@@ -33,7 +38,7 @@ def get_common_params(key_id):
 
 def get_quote_body(body):
     items = body.items()
-    items.sort()
+    items = sorted(items, key=lambda x: x[0])
     encode_str = ''
     for k, v in items:
         encode_str += url_quote(k) + '=' + url_quote(v) + '&'
@@ -49,6 +54,10 @@ def get_str_to_sign(encode_str, method):
 
 def sign_str(key, str_to_sign):
     key += '&'
+    if isinstance(str_to_sign, six.text_type):
+        str_to_sign = str_to_sign.encode()
+    if isinstance(key, six.text_type):
+        key = key.encode()
     sign = hmac.new(key, str_to_sign, hashlib.sha1).digest()
     signature = base64.encodestring(sign).strip()
     return signature
