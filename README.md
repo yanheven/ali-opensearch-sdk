@@ -13,19 +13,19 @@ Project manage [Launchpad](https://launchpad.net/ali-opensearch-python-sdk)
 ##### 1.1 SDK structure
 There are 7 type of resources provided by opensearch, they are:   
  
-1, app: Application  
-2, data: Data Process  
-3, search: Search Related Action  
-4, suggest: Suggestion for Search  
-5, index: Index Reconstruction  
-6, quota: Quota Management  
-7, log: Error Log Query  
+- app: Application  
+- data: Data Process  
+- search: Search Related Action  
+- suggest: Suggestion for Search  
+- index: Index Reconstruction  
+- quota: Quota Management  
+- log: Error Log Query  
 
 There are 5 Operation for almost all resources, they are CURD as follow:  
 
-1, list: list all of this type of resources.    
-2, show: show detail information of a specific resource.      
-3,4,5, CUD: create, update and delete a specific resource.
+- list: list all of this type of resources.    
+- show: show detail information of a specific resource.      
+- CUD: create, update and delete a specific resource.
 
 ###### 1.1.1 app Operation：
 
@@ -76,7 +76,7 @@ Code style follow the PEP8 rules.
 Apache License Version 2.0
 
 #### 6, Release Note：
-1, V2.0.0-dev Provide only few functions of opensearch, not yet cover all functions.  
-2, V2.0.0 completed all api functions.  
-3, V2.0.1 add compatibility for python3.  
+- 1, V2.0.0-dev Provide only few functions of opensearch, not yet cover all functions.  
+- 2, V2.0.0 completed all api functions.  
+- 3, V2.0.1 add compatibility for python3.  
 
