@@ -67,7 +67,7 @@ def creat_data_process(client):
         }
     ]
     items = json.dumps(items)
-    data_ret = client.data.create(table_name, items)
+    data_ret = client.data.create('test_app', table_name, items)
     print(data_ret)
     '''
         {
@@ -238,8 +238,11 @@ if __name__ == '__main__':
     key_id = mykey.KEY['key_id']
     client = Client(url, key, key_id)
     # list_app(client)
-    # creat_data_process(client)
     # create_app(client)
+
+    # must create app before create data process
+
+    # creat_data_process(client)
     # search(client)
     # suggest(client)
     # index_refactor(client)

@@ -16,6 +16,8 @@ class AppTest(base.TestCase):
         Manager.send_get = Manager.send_post = mock_send
 
     def test_list(self):
-        resp = self.data_manager.create('1', '2')
+        resp = self.data_manager.create('a', '1', '2')
         self.assertEqual(FAKE_RESP, resp)
-        Manager.send_post.assert_called_with({'table_name': '1', 'items': '2'})
+        Manager.send_post.assert_called_with({'table_name': '1',
+                                              'items': '2'},
+                                             '/a')
